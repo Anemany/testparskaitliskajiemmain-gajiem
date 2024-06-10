@@ -75,6 +75,7 @@ class app:
                 print(f"Jautājums {i}: {self.questions[i - 1]['question']}")
                 correct_answers = " vai ".join(self.questions[i - 1]["answer"])
                 print(f"Pareizā atbilde: {correct_answers}\n")
+        input()
 
 if __name__ == "__main__":
     test = app()
