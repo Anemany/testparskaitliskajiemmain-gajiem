@@ -1,4 +1,20 @@
-class main:
+from flask import Flask, render_template, request, redirect, url_for
+
+app = Flask(__name__, static_folder="./static", template_folder="./templates")
+app.debug = True
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/questions')
+def questions():
+    return render_template('questions.html')
+
+if __name__ == "__main__":    
+    app.run(host='0.0.0.0', port=8080)
+    
+class app:
     def __init__(self):
         self.questions = [
             {
@@ -45,26 +61,37 @@ class main:
                 "question": "Ko atgriež 'ceil(4.2)'?",
                 "options": ["4", "4.5", "5", "5.0"],
                 "answer": ["3", "4"]
+            },
+            {
+                "question": "Ko dara funkcija statistics.median()?",
+                "options": ["Aprēķina doto datu mediānu", " Aprēķina doto vidējo vērtību", " Aprēķina sakni", "Aprēķina modu"],
+                "answer": ["1", "2"]
             }
         ]
         self.score = 0
+        self.incorrect_questions = []
 
     def run_test(self):
-        print("Tests par skaitliskajiem maingajiem\n")
+        print("Tests par skaitliskajiem mainīgajiem\n")
         for i, q in enumerate(self.questions, start=1):
             print(f"Jautājums {i}: {q['question']}")
             for j, option in enumerate(q["options"], start=1):
                 print(f"{j}. {option}")
             answer = input("Jūsu atbilde (ievadiet numuru): ")
             if str(answer) in q["answer"]:
-                print("Pareizi!\n")
                 self.score += 1
             else:
-                correct_answers = " vai ".join(q["answer"])
-                print(f"Nepareizi. Pareizā atbilde: {correct_answers}\n")
+                self.incorrect_questions.append(i)
 
         print(f"Jūsu rezultāts: {self.score} no {len(self.questions)}")
 
+        if self.incorrect_questions:
+            print("Jautājumi, uz kuriem tika atbildēts nepareizi:")
+            for i in self.incorrect_questions:
+                print(f"Jautājums {i}: {self.questions[i - 1]['question']}")
+                correct_answers = " vai ".join(self.questions[i - 1]["answer"])
+                print(f"Pareizā atbilde: {correct_answers}\n")
+
 if __name__ == "__main__":
-    test = main()
+    test = app()
     test.run_test()
